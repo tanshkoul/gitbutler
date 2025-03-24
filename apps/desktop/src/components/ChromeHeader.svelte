@@ -137,7 +137,7 @@
 <style>
 	.header {
 		display: flex;
-		padding: 14px;
+		padding: 14px 14px 7px 14px;
 		align-items: center;
 		justify-content: space-between;
 		overflow: hidden;

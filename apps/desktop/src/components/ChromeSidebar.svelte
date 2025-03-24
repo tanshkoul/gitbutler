@@ -320,7 +320,7 @@
 		align-items: flex-start;
 		justify-content: space-between;
 		height: 100%;
-		padding: 0 16px 16px 16px;
+		padding: 0 7px 16px 16px;
 	}
 
 	.top,

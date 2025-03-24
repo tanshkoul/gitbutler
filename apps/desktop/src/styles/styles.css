@@ -115,3 +115,8 @@ body {
 		background-color: var(--clr-bg-1);
 	}
 }
+
+.focused {
+	outline: 1px solid blue !important ;
+	outline-offset: 2px;
+}

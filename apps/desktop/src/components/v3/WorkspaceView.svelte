@@ -110,6 +110,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
+		border-radius: var(--radius-ml);
 		position: relative;
 		/* Resizer looks better with hidden overflow. */
 		overflow: hidden;
