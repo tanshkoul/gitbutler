@@ -22,7 +22,7 @@
 		branchName: string;
 		seriesCount: number;
 		isTopBranch: boolean;
-		hasForgeBranch: boolean;
+		isPushed: boolean;
 		pr?: DetailedPullRequest;
 		branchType: CommitStatus;
 		descriptionOption?: boolean;
@@ -42,7 +42,7 @@
 		rightClickTrigger,
 		isTopBranch,
 		seriesCount,
-		hasForgeBranch,
+		isPushed,
 		branchName,
 		pr,
 		branchType,
@@ -100,7 +100,7 @@
 		</ContextMenuSection>
 	{/if}
 	<ContextMenuSection>
-		{#if hasForgeBranch}
+		{#if isPushed}
 			<ContextMenuItem
 				label="Open in browser"
 				onclick={() => {
@@ -127,7 +127,7 @@
 				}}
 			/>
 		{/if}
-		{#if $aiGenEnabled && aiConfigurationValid && !hasForgeBranch}
+		{#if $aiGenEnabled && aiConfigurationValid && !isPushed}
 			<ContextMenuItem
 				label="Generate branch name"
 				onclick={() => {
@@ -177,8 +177,8 @@
 
 <Modal
 	width="small"
-	title={hasForgeBranch ? 'Branch has already been pushed' : 'Rename branch'}
-	type={hasForgeBranch ? 'warning' : 'info'}
+	title={isPushed ? 'Branch has already been pushed' : 'Rename branch'}
+	type={isPushed ? 'warning' : 'info'}
 	bind:this={renameSeriesModal}
 	onSubmit={async (close) => {
 		if (newName && newName !== branchName) {
@@ -194,7 +194,7 @@
 >
 	<Textbox placeholder="New name" id="newSeriesName" bind:value={newName} autofocus />
 
-	{#if hasForgeBranch}
+	{#if isPushed}
 		<div class="text-12 helper-text">
 			Renaming a branch that has already been pushed will create a new branch at the remote. The old
 			one will remain untouched but will be disassociated from this branch.
