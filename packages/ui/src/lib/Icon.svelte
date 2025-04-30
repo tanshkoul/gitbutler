@@ -62,6 +62,7 @@
 
 <style lang="postcss">
 	.icon-wrapper {
+		z-index: var(--z-ground);
 		--spinner-stroke-width: 1.5;
 		flex-shrink: 0;
 		pointer-events: none;

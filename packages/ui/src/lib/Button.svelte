@@ -244,6 +244,10 @@
 			padding: 0 2px;
 		}
 
+		.label:empty {
+			display: none;
+		}
+
 		.btn-icon {
 			pointer-events: none;
 			flex-shrink: 0;

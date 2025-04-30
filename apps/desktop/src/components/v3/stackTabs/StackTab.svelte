@@ -8,7 +8,6 @@
 		projectId: string;
 		stackId: string;
 		anchors?: string[];
-
 		selected?: boolean;
 		href?: string;
 		onNextTab?: () => void;

@@ -7,7 +7,7 @@
 	import ReviewView from '$components/v3/ReviewView.svelte';
 	import SelectionView from '$components/v3/SelectionView.svelte';
 	import WorktreeChanges from '$components/v3/WorktreeChanges.svelte';
-	import StackTabs from '$components/v3/stackTabs/StackTabs.svelte';
+	import StackNavigation from '$components/v3/stackTabs/StackNavigation.svelte';
 	import { Focusable, FocusManager } from '$lib/focus/focusManager.svelte';
 	import { focusable } from '$lib/focus/focusable.svelte';
 	import { StackService } from '$lib/stacks/stackService.svelte';
@@ -123,7 +123,7 @@
 	>
 		<ReduxResult {projectId} result={stacksResult?.current}>
 			{#snippet children(stacks)}
-				<StackTabs
+				<StackNavigation
 					{projectId}
 					{stacks}
 					selectedId={stackId}

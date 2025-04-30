@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { StackService } from '$lib/stacks/stackService.svelte';
 	import { getContext } from '@gitbutler/shared/context';
+	import Button from '@gitbutler/ui/Button.svelte';
 	import ContextMenu from '@gitbutler/ui/ContextMenu.svelte';
 	import ContextMenuItem from '@gitbutler/ui/ContextMenuItem.svelte';
 	import ContextMenuSection from '@gitbutler/ui/ContextMenuSection.svelte';
@@ -19,10 +20,12 @@
 	let contextMenu = $state<ContextMenu>();
 </script>
 
-<button
-	aria-label="Stack menu"
+<Button
+	icon="kebab"
 	class="menu-button focus-state"
-	class:menu-open={isOpen}
+	activated={isOpen}
+	size="tag"
+	kind="ghost"
 	onmousedown={(e) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -34,11 +37,9 @@
 		e.preventDefault();
 		e.stopPropagation();
 	}}
-	bind:this={trigger}
+	bind:el={trigger}
 	type="button"
->
-	<div class="menu-button-dots"></div>
-</button>
+></Button>
 
 <ContextMenu
 	bind:this={contextMenu}
