@@ -470,6 +470,7 @@ pub fn create_commit_and_update_refs(
                     but_rebase::RebaseStep::Pick {
                         commit_id,
                         new_message: None,
+                        new_tree: None,
                     }
                 }))?;
                 if let Some(workspace_tip) = workspace_tip {
@@ -503,6 +504,7 @@ pub fn create_commit_and_update_refs(
                     builder.steps([but_rebase::RebaseStep::Pick {
                         commit_id,
                         new_message: None,
+                        new_tree: None,
                     }])?;
                     match builder.rebase() {
                         Ok(mut outcome) => {

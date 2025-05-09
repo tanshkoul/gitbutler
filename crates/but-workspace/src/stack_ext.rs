@@ -38,6 +38,7 @@ impl StackExt for gitbutler_stack::Stack {
                 let pick_step = RebaseStep::Pick {
                     commit_id: commit.id,
                     new_message: None,
+                    new_tree: None,
                 };
                 steps.push(pick_step);
             }

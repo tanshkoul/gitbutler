@@ -32,6 +32,8 @@ pub enum RebaseStep {
         // TODO: add `base: Option<ObjectId>` to allow restarting the sequence at a new base
         //       for multi-branch rebasing. It would keep the previous cursor, to allow the last
         //       branch to contain a pick of the merge commit on top, which it can then correctly re-merge.
+        /// Optionally use this tree instead of the original commit's tree for the rebase.
+        new_tree: Option<gix::ObjectId>,
     },
     /// Squashes an existing commit into the one in the first `Pick` or `Merge` RebaseStep that precedes it.
     ///
@@ -53,7 +55,8 @@ pub enum RebaseStep {
 }
 
 impl RebaseStep {
-    fn commit_id(&self) -> Option<&gix::oid> {
+    /// Get the commit id associated with a given step
+    pub fn commit_id(&self) -> Option<&gix::oid> {
         match self {
             RebaseStep::Pick { commit_id, .. }
             | RebaseStep::SquashIntoPreceding { commit_id, .. } => Some(commit_id),
@@ -168,10 +171,7 @@ impl Rebase<'_> {
     /// - The refname must be a valid reference name
     fn validate_step(&self, step: &RebaseStep) -> Result<()> {
         match step {
-            RebaseStep::Pick {
-                commit_id,
-                new_message: _,
-            } => {
+            RebaseStep::Pick { commit_id, .. } => {
                 self.assure_unique_step_and_existing_non_base(commit_id, "Picked")?;
             }
             RebaseStep::SquashIntoPreceding {
@@ -233,7 +233,19 @@ fn rebase(
             RebaseStep::Pick {
                 commit_id,
                 new_message,
+                new_tree,
             } => {
+                // This should be the source commit id
+                last_seen_commit = Some(commit_id);
+
+                // If we have provided a new tree, rewrite the commit with the
+                // new tree so when we do the cherry-pick it correctly gets used
+                let commit_id = if let Some(new_tree) = new_tree {
+                    retree_commit(repo, commit_id, new_tree)?
+                } else {
+                    commit_id
+                };
+
                 let commit = to_commit(repo, commit_id)?;
                 if commit.parents.len() > 1 {
                     let mut merge_commit = commit;
@@ -290,7 +302,6 @@ fn rebase(
                         }
                     }
                 }
-                last_seen_commit = Some(commit_id);
             }
             RebaseStep::SquashIntoPreceding {
                 commit_id,
@@ -355,6 +366,16 @@ fn reword_commit(
 ) -> Result<gix::ObjectId> {
     let mut new_commit = repo.find_commit(oid)?.decode()?.to_owned();
     new_commit.message = new_message;
+    Ok(commit::create(repo, new_commit, CommitterMode::Update)?)
+}
+
+fn retree_commit(
+    repo: &gix::Repository,
+    oid: gix::ObjectId,
+    new_tree: gix::ObjectId,
+) -> Result<gix::ObjectId> {
+    let mut new_commit = repo.find_commit(oid)?.decode()?.to_owned();
+    new_commit.tree = new_tree;
     Ok(commit::create(repo, new_commit, CommitterMode::Update)?)
 }
 
